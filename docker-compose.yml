@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    command: bash start.sh
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    environment:
+      GRADLE_USER_HOME: /box
+    volumes:
+      - .:/reactive-flashcards
+      - box:/box
+    depends_on:
+      - db
+  db:
+    image: mongo:5.0.9
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: reactive-flashcards
+      MONGO_INITDB_ROOT_PASSWORD: reactive-flashcards
+      MONGO_INITDB_DATABASE: reactive-flashcards
+    ports:
+      - "27017:27017"
+  box:
+    image: busybox
+    volumes:
+      - /box
+volumes:
+  db:
+  box:

@@ -5,8 +5,12 @@ plugins {
 }
 
 group = 'br.com.dio'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+version = '1.0.0'
+
+java{
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
 
 configurations {
 	compileOnly {
@@ -18,13 +22,25 @@ repositories {
 	mavenCentral()
 }
 
+ext{
+	mapstructVersion = '1.5.0.Final'
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation "org.mapstruct:mapstruct:$mapstructVersion"
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'commons-collections:commons-collections:3.2.2'
+
 	compileOnly 'org.projectlombok:lombok'
+
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	annotationProcessor "org.mapstruct:mapstruct:$mapstructVersion"
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 	testImplementation 'io.projectreactor:reactor-test'
@@ -32,4 +48,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jar{
+	enabled = false
 }
