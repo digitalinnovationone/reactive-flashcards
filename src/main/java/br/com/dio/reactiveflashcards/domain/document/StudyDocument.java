@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@Document(collection = "studies_decks")
+@Document(collection = "studies")
 public record StudyDocument(@Id
                             String id,
                             String userId,
