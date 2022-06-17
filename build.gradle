@@ -23,7 +23,7 @@ repositories {
 }
 
 ext{
-	mapstructVersion = '1.5.0.Final'
+	mapstructVersion = '1.5.1.Final'
 }
 
 dependencies {
@@ -39,7 +39,7 @@ dependencies {
 
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-	annotationProcessor "org.mapstruct:mapstruct:$mapstructVersion"
+	annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'

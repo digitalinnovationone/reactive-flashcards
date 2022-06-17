@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Validated
 @RestController
-@RequestMapping
+@RequestMapping("users")
 @Slf4j
 @AllArgsConstructor
 public class UserController {
@@ -29,7 +29,7 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-       @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public Mono<UserResponse> save(@Valid @RequestBody final UserRequest request){
         return userService.save(userMapper.toDocument(request))
