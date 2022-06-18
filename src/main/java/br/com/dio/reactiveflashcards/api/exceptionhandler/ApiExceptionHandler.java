@@ -1,6 +1,7 @@
 package br.com.dio.reactiveflashcards.api.exceptionhandler;
 
 import br.com.dio.reactiveflashcards.api.contorller.response.ProblemResponse;
+import br.com.dio.reactiveflashcards.domain.exception.NotFoundException;
 import br.com.dio.reactiveflashcards.domain.exception.ReactiveFlashcardsException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,15 +11,21 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.MethodNotAllowedException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
 import reactor.core.publisher.Mono;
 
+import javax.validation.ConstraintViolationException;
+
 import static br.com.dio.reactiveflashcards.domain.exception.BaseErrorMessage.GENERIC_EXCEPTION;
 import static br.com.dio.reactiveflashcards.domain.exception.BaseErrorMessage.GENERIC_METHOD_NOT_ALLOW;
+import static br.com.dio.reactiveflashcards.domain.exception.BaseErrorMessage.GENERIC_NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
@@ -33,10 +40,32 @@ public class ApiExceptionHandler implements WebExceptionHandler {
     public Mono<Void> handle(final ServerWebExchange exchange, final Throwable ex) {
         return Mono.error(ex)
                 .onErrorResume(MethodNotAllowedException.class, e -> handleMethodNotAllowedException(exchange, e))
+                .onErrorResume(NotFoundException.class, e-> handleNotFoundException(exchange, e))
+                .onErrorResume(ResponseStatusException.class, e -> handleResponseStatusException(exchange, e))
+                //.onErrorResume(ConstraintViolationException.class,)
+                //.onErrorResume(WebExchangeBindException.class,)
                 .onErrorResume(ReactiveFlashcardsException.class, e -> handleReactiveFlashcardsException(exchange, e))
                 .onErrorResume(Exception.class, e -> handleException(exchange, e))
                 .onErrorResume(JsonProcessingException.class, e -> handleJsonProcessingException(exchange, e))
                 .then();
+    }
+
+    private Mono<Void> handleNotFoundException(final ServerWebExchange exchange, final NotFoundException ex){
+        return Mono.fromCallable(() -> {
+                    prepareExchange(exchange, NOT_FOUND);
+                    return ex.getMessage();
+                }).map(message -> buildError(NOT_FOUND, message))
+                .doFirst(() -> log.error("==== NotFoundException", ex))
+                .flatMap(response -> writeResponse(exchange, response));
+    }
+
+    private Mono<Void> handleResponseStatusException(final ServerWebExchange exchange, final ResponseStatusException ex){
+        return Mono.fromCallable(() -> {
+                    prepareExchange(exchange, NOT_FOUND);
+                    return GENERIC_NOT_FOUND.getMessage();
+                }).map(message -> buildError(NOT_FOUND, message))
+                .doFirst(() -> log.error("==== ResponseStatusException", ex))
+                .flatMap(response -> writeResponse(exchange, response));
     }
 
     private Mono<Void> handleMethodNotAllowedException(final ServerWebExchange exchange, final MethodNotAllowedException ex){
@@ -73,7 +102,7 @@ public class ApiExceptionHandler implements WebExceptionHandler {
                     return GENERIC_METHOD_NOT_ALLOW.getMessage();
         }).map(message -> buildError(METHOD_NOT_ALLOWED, message))
                 .doFirst(() -> log.error("==== JsonProcessingException: Failed to map exception for the request {} ",
-                        exchange.getRequest().getMethod(), ex))
+                        exchange.getRequest().getPath().value(), ex))
                 .flatMap(response -> writeResponse(exchange, response));
     }
 
