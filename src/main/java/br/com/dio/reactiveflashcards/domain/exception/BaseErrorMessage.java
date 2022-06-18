@@ -11,9 +11,9 @@ public class BaseErrorMessage {
 
     private final String DEFAULT_RESOURCE = "messages";
 
-    private static final BaseErrorMessage GENERIC_EXCEPTION = new BaseErrorMessage("generic");
-    private static final BaseErrorMessage GENERIC_NOT_FOUND = new BaseErrorMessage("generic.notFound");
-    private static final BaseErrorMessage GENERIC_METHOD_NOT_ALLOW = new BaseErrorMessage("generic.methodNotAllow");
+    public static final BaseErrorMessage GENERIC_EXCEPTION = new BaseErrorMessage("generic");
+    public static final BaseErrorMessage GENERIC_NOT_FOUND = new BaseErrorMessage("generic.notFound");
+    public static final BaseErrorMessage GENERIC_METHOD_NOT_ALLOW = new BaseErrorMessage("generic.methodNotAllow");
 
     private final String key;
     private String[] params;
