@@ -9,6 +9,7 @@ import br.com.dio.reactiveflashcards.domain.service.query.UserQueryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Validated
@@ -56,6 +58,13 @@ public class UserController {
         return userService.update(userMapper.toDocument(request, id))
                 .doFirst(() -> log.info("==== Updating a user with follow info [body: {}, id: {}]", request, id))
                 .map(userMapper::toResponse);
+    }
+
+    @DeleteMapping(value = "{id}")
+    @ResponseStatus(NO_CONTENT)
+    public Mono<Void> delete(@PathVariable @Valid @MongoId(message = "{userController.id}") final String id){
+        return userService.delete(id)
+                .doFirst(() -> log.info("==== Deleting a user with follow id {}", id));
     }
 
 }
