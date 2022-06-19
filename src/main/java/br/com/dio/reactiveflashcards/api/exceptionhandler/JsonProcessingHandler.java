@@ -3,6 +3,7 @@ package br.com.dio.reactiveflashcards.api.exceptionhandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -10,6 +11,7 @@ import static br.com.dio.reactiveflashcards.domain.exception.BaseErrorMessage.GE
 import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
 
 @Slf4j
+@Component
 public class JsonProcessingHandler extends AbstractHandleException<JsonProcessingException>{
 
     public JsonProcessingHandler(final ObjectMapper mapper) {
@@ -17,7 +19,7 @@ public class JsonProcessingHandler extends AbstractHandleException<JsonProcessin
     }
 
     @Override
-    Mono<Void> handlerException(final ServerWebExchange exchange, final JsonProcessingException ex) {
+    public Mono<Void> handlerException(final ServerWebExchange exchange, final JsonProcessingException ex) {
         return Mono.fromCallable(() -> {
                     prepareExchange(exchange, METHOD_NOT_ALLOWED);
                     return GENERIC_METHOD_NOT_ALLOW.getMessage();

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
@@ -16,6 +17,7 @@ import static br.com.dio.reactiveflashcards.domain.exception.BaseErrorMessage.GE
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Slf4j
+@Component
 public class WebExchangeBindHandler extends AbstractHandleException<WebExchangeBindException>{
 
     private final MessageSource messageSource;
@@ -26,7 +28,7 @@ public class WebExchangeBindHandler extends AbstractHandleException<WebExchangeB
     }
 
     @Override
-    Mono<Void> handlerException(final ServerWebExchange exchange, final WebExchangeBindException ex) {
+    public Mono<Void> handlerException(final ServerWebExchange exchange, final WebExchangeBindException ex) {
         return Mono.fromCallable(() -> {
                     prepareExchange(exchange, BAD_REQUEST);
                     return GENERIC_BAD_REQUEST.getMessage();
