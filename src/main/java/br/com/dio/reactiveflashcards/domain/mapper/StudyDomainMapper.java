@@ -22,10 +22,10 @@ public interface StudyDomainMapper {
         return toQuestion(values.get(position));
     }
 
-    @Mapping(target = "answered", source = "front")
-    @Mapping(target = "answeredIn", expression = "java(java.time.OffsetDateTime.now())")
-    @Mapping(target = "asked", ignore = true)
-    @Mapping(target = "askedIn", ignore = true)
+    @Mapping(target = "asked", source = "front")
+    @Mapping(target = "askedIn", expression = "java(java.time.OffsetDateTime.now())")
+    @Mapping(target = "answered", ignore = true)
+    @Mapping(target = "answeredIn", ignore = true)
     @Mapping(target = "expected", source = "back")
     Question toQuestion(final StudyCard card);
 
