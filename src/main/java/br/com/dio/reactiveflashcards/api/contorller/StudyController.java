@@ -3,10 +3,14 @@ package br.com.dio.reactiveflashcards.api.contorller;
 import br.com.dio.reactiveflashcards.api.contorller.request.StudyRequest;
 import br.com.dio.reactiveflashcards.api.contorller.response.QuestionResponse;
 import br.com.dio.reactiveflashcards.api.mapper.StudyMapper;
+import br.com.dio.reactiveflashcards.core.validation.MongoId;
 import br.com.dio.reactiveflashcards.domain.service.StudyService;
+import br.com.dio.reactiveflashcards.domain.service.query.StudyQueryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +31,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class StudyController {
 
     private final StudyService studyService;
+    private final StudyQueryService studyQueryService;
     private final StudyMapper studyMapper;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -34,7 +39,14 @@ public class StudyController {
     public Mono<QuestionResponse> start(@Valid @RequestBody final StudyRequest request){
         return studyService.start(studyMapper.toDocument(request))
                 .doFirst(() -> log.info("==== try to create a study with follow request {}", request))
-                .map(document -> studyMapper.toResponse(document.getLastQuestionPending()));
+                .map(document -> studyMapper.toResponse(document.getLastQuestionPending(), document.id()));
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, value = "{id}")
+    public Mono<QuestionResponse> getCurrentQuestion(@Valid @PathVariable @MongoId(message = "{studyController.id}") final String id){
+        return studyQueryService.getLastPendingQuestion(id)
+                .doFirst(() -> log.info("==== try to get a next question in stuudy {}", id))
+                .map(question -> studyMapper.toResponse(question, id));
     }
 
 }

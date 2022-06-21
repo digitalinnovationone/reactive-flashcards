@@ -5,7 +5,9 @@ import lombok.Builder;
 
 import java.time.OffsetDateTime;
 
-public record QuestionResponse(@JsonProperty("asked")
+public record QuestionResponse(@JsonProperty("id")
+                               String id,
+                               @JsonProperty("asked")
                                String asked,
                                @JsonProperty("askedIn")
                                OffsetDateTime askedIn) {
