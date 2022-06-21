@@ -37,7 +37,7 @@ public record StudyDocument(@Id
         return new StudyDocumentBuilder(id, userId, complete, studyDeck, questions, createdAt, updatedAt);
     }
 
-    public Question getLastQuestionPending(){
+    public Question getLastPendingQuestion(){
         return questions.stream().filter(q -> Objects.isNull(q.answeredIn())).findFirst().orElseThrow();
     }
 

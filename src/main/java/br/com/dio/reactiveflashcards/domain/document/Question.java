@@ -2,6 +2,7 @@ package br.com.dio.reactiveflashcards.domain.document;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.OffsetDateTime;
@@ -17,6 +18,10 @@ public record Question(String asked,
 
     public Boolean isAnswered(){
         return Objects.isNull(answeredIn);
+    }
+
+    public Boolean isCorrect(){
+        return isAnswered() && answered.equals(expected);
     }
 
     public static QuestionBuilder builder(){
@@ -38,21 +43,13 @@ public record Question(String asked,
 
         public QuestionBuilder asked(final String asked){
             this.asked = asked;
-            return this;
-        }
-
-        public QuestionBuilder askedIn(final OffsetDateTime askedIn){
-            this.askedIn = askedIn;
+            this.askedIn = OffsetDateTime.now();
             return this;
         }
 
         public QuestionBuilder answered(final String answered){
             this.answered = answered;
-            return this;
-        }
-
-        public QuestionBuilder answeredIn(final OffsetDateTime answeredIn){
-            this.answeredIn = answeredIn;
+            this.answeredIn = OffsetDateTime.now();
             return this;
         }
 
