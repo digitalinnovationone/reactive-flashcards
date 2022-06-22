@@ -7,9 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public record QuestionDTO(String asked,
-                       OffsetDateTime askedIn, String answered,
-                       OffsetDateTime answeredIn, String expected) {
+public record QuestionDTO(String asked, OffsetDateTime askedIn, String answered, OffsetDateTime answeredIn,
+                          String expected) {
 
     public Boolean isAnswered(){
         return Objects.nonNull(answeredIn);

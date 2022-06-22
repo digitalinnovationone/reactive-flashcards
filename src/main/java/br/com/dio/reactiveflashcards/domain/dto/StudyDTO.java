@@ -13,7 +13,7 @@ public record StudyDTO(String id,
                        Boolean complete,
                        StudyDeckDTO studyDeck,
                        List<QuestionDTO> questions,
-                       List<String> remainAnswers,
+                       List<String> remainAsks,
                        OffsetDateTime createdAt,
                        OffsetDateTime updatedAt) {
 
@@ -22,11 +22,11 @@ public record StudyDTO(String id,
     }
 
     public StudyDocumentBuilder toBuilder(){
-        return new StudyDocumentBuilder(id, userId, studyDeck, questions, remainAnswers,createdAt, updatedAt);
+        return new StudyDocumentBuilder(id, userId, studyDeck, questions, remainAsks,createdAt, updatedAt);
     }
 
     public Boolean hasAnyAnswer(){
-        return CollectionUtils.isNotEmpty(remainAnswers);
+        return CollectionUtils.isNotEmpty(remainAsks);
     }
 
     @NoArgsConstructor
@@ -37,7 +37,7 @@ public record StudyDTO(String id,
         private String userId;
         private StudyDeckDTO studyDeck;
         private List<QuestionDTO> questions = new ArrayList<>();
-        private List<String> remainAnswers;
+        private List<String> remainAsks = new ArrayList<>();
         private OffsetDateTime createdAt;
         private OffsetDateTime updatedAt;
 
@@ -68,7 +68,7 @@ public record StudyDTO(String id,
         }
 
         public StudyDocumentBuilder remainAnswers(final List<String> remainAnswers){
-            this.remainAnswers = remainAnswers;
+            this.remainAsks = remainAnswers;
             return this;
         }
 
@@ -85,7 +85,7 @@ public record StudyDTO(String id,
         public StudyDTO build(){
             var rightQuestions = questions.stream().filter(QuestionDTO::isCorrect).toList();
             var complete = rightQuestions.size() == studyDeck.cards().size();
-            return new StudyDTO(id, userId, complete, studyDeck, questions, remainAnswers, createdAt, updatedAt);
+            return new StudyDTO(id, userId, complete, studyDeck, questions, remainAsks, createdAt, updatedAt);
         }
 
     }

@@ -4,10 +4,14 @@ import br.com.dio.reactiveflashcards.domain.document.Card;
 import br.com.dio.reactiveflashcards.domain.document.Question;
 import br.com.dio.reactiveflashcards.domain.document.StudyCard;
 import br.com.dio.reactiveflashcards.domain.document.StudyDocument;
+import br.com.dio.reactiveflashcards.domain.dto.QuestionDTO;
+import br.com.dio.reactiveflashcards.domain.dto.StudyCardDTO;
+import br.com.dio.reactiveflashcards.domain.dto.StudyDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -29,6 +33,12 @@ public interface StudyDomainMapper {
     @Mapping(target = "expected", source = "back")
     Question toQuestion(final StudyCard card);
 
+    @Mapping(target = "asked", source = "front")
+    @Mapping(target = "answered", ignore = true)
+    @Mapping(target = "answeredIn", ignore = true)
+    @Mapping(target = "expected", source = "back")
+    QuestionDTO toQuestion(final StudyCardDTO card);
+
     default StudyDocument answer(final StudyDocument document, final String answer){
         var currentQuestion = document.getLastPendingQuestion();
         var questions = document.questions();
@@ -37,5 +47,9 @@ public interface StudyDomainMapper {
         questions.set(curIndexQuestion, currentQuestion);
         return document.toBuilder().questions(questions).build();
     }
+
+    StudyDTO toDTO(final StudyDocument document, final List<String> remainAsks);
+
+    StudyDocument toDocument(final StudyDTO dto);
 
 }
