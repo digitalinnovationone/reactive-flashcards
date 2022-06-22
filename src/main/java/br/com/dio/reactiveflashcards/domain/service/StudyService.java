@@ -65,7 +65,7 @@ public class StudyService {
 
     public Mono<StudyDocument> answer(final String id, final String answer){
         studyQueryService.findById(id)
-                .flatMap(study -> studyQueryService.verifyIfFinished(study).thenReturn(study))
+                .flatMap(studyQueryService::verifyIfFinished)
                 .map(study -> studyDomainMapper.answer(study, answer));
         return Mono.just(StudyDocument.builder().build());
     }
