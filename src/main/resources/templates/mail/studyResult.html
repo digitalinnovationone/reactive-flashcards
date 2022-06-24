@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body style="font-family: Arial; font-size: 14px;">
+
+    <p th:text="${'Ol&#225; ' + username + ' Segue abaixo informa&#231;&#245;es do seu &#250;ltimo estudo'}">
+        Ol&#225; Fulano Segue abaixo informa&#231;&#245;es do seu &#250;ltimo estudo
+    </p>
+
+    <p>
+        <h2 th:text="${deck.name}">Estudo de ingl&#234;s</h2>
+        <h3 th:text="${deck.description}">Deck para estudos de ingl&#250;s n&#237;vel b&#225;sico</h3>
+
+        <table style="width: 100%; border-collapse: collapse;  margin: 20px 0">
+            <thead>
+            <tr>
+                <th>Pergunta</th>
+                <th>Sua resposta</th>
+                <th>Resposta esperada</th>
+                <th>Perguntado em</th>
+                <th>Respondido em</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr style="border-bottom: 1px solid #ccc; border-top: 1px solid #ccc;" th:each="question: ${questions}">
+                <td th:text="${question.asked}" style="text-align:center">ball</td>
+                <td th:text="${question.answered}" style="text-align:center">bola</td>
+                <td th:text="${question.expected}" style="text-align:center">bola</td>
+                <td th:text="${#temporals.format(question.askedIn, 'dd/MM/yyyy - hh:mm:ss')}" style="text-align: center">10/06/2017 - 15:00:00</td>
+                <td th:text="${#temporals.format(question.answerIn, 'dd/MM/yyyy - hh:mm:ss')}" style="text-align: center">10/06/2017 - 15:10:00</td>
+            </tr>
+            </tbody>
+        </table>
+    </p>
+
+    <p>Obrigado pela prefer&#234;ncia. Continue se esfor&#231;ando</p>
+    <p>Equipe Reacttive Flashcards! :)</p>
+
+</body>
+</html>
