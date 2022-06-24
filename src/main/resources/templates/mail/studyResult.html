@@ -29,7 +29,7 @@
                 <td th:text="${question.answered}" style="text-align:center">bola</td>
                 <td th:text="${question.expected}" style="text-align:center">bola</td>
                 <td th:text="${#temporals.format(question.askedIn, 'dd/MM/yyyy - hh:mm:ss')}" style="text-align: center">10/06/2017 - 15:00:00</td>
-                <td th:text="${#temporals.format(question.answerIn, 'dd/MM/yyyy - hh:mm:ss')}" style="text-align: center">10/06/2017 - 15:10:00</td>
+                <td th:text="${#temporals.format(question.answeredIn, 'dd/MM/yyyy - hh:mm:ss')}" style="text-align: center">10/06/2017 - 15:10:00</td>
             </tr>
             </tbody>
         </table>
