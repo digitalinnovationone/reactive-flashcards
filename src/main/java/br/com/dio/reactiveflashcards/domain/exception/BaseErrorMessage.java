@@ -15,6 +15,7 @@ public class BaseErrorMessage {
     public static final BaseErrorMessage GENERIC_NOT_FOUND = new BaseErrorMessage("generic.notFound");
     public static final BaseErrorMessage GENERIC_METHOD_NOT_ALLOW = new BaseErrorMessage("generic.methodNotAllow");
     public static final BaseErrorMessage GENERIC_BAD_REQUEST = new BaseErrorMessage("generic.badRequest");
+    public static final BaseErrorMessage GENERIC_MAX_RETRIES = new BaseErrorMessage("generic.maxRetries");
     public static final BaseErrorMessage USER_NOT_FOUND = new BaseErrorMessage("user.NotFound");
     public static final BaseErrorMessage DECK_NOT_FOUND = new BaseErrorMessage("deck.NotFound");
     public static final BaseErrorMessage EMAIL_ALREADY_USED = new BaseErrorMessage("user.EmailAlreadyUsed");

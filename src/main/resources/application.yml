@@ -16,3 +16,7 @@ spring:
 reactive-flashcards:
   mail:
     sender: Reactive Flashcards <noreply@reactiveflashcards.com.br>
+
+retry-config:
+  max-retries: 3
+  min-duration: 1
