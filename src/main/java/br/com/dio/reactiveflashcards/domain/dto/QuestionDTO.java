@@ -2,7 +2,7 @@ package br.com.dio.reactiveflashcards.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Field;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -40,14 +40,18 @@ public record QuestionDTO(String asked, OffsetDateTime askedIn, String answered,
         private String expected;
 
         public QuestionBuilder asked(final String asked){
-            this.asked = asked;
-            this.askedIn = OffsetDateTime.now();
+            if (StringUtils.isNotBlank(asked)) {
+                this.asked = asked;
+                this.askedIn = OffsetDateTime.now();
+            }
             return this;
         }
 
         public QuestionBuilder answered(final String answered){
-            this.answered = answered;
-            this.answeredIn = OffsetDateTime.now();
+            if (StringUtils.isNotBlank(answered)) {
+                this.answered = answered;
+                this.answeredIn = OffsetDateTime.now();
+            }
             return this;
         }
 

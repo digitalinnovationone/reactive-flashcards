@@ -77,11 +77,13 @@ public class StudyService {
                 .map(tuple -> studyDomainMapper.toDTO(tuple.getT1(), tuple.getT2()))
                 .flatMap(this::setNewQuestion)
                 .map(studyDomainMapper::toDocument)
-                .flatMap(studyRepository::save);
+                .flatMap(studyRepository::save)
+                .doFirst(() -> log.info("==== saving answer and next question if have one"));
     }
 
     private Mono<List<String>> getNextPossibilities(final StudyDocument document){
         return Flux.fromIterable(document.studyDeck().cards())
+                .doFirst(() -> log.info("==== Getting question not used ow questions without right answers"))
                 .map(StudyCard::front)
                 .filter(asks -> document.questions().stream()
                         .filter(Question::isCorrect)
@@ -93,6 +95,7 @@ public class StudyService {
 
     private Mono<List<String>> removeLastAsk(final List<String> asks, final String asked) {
         return Mono.just(asks)
+                .doFirst(() -> log.info("==== remove last asked question if it is not a last pending question in study"))
                 .filter(a -> a.size() == 1)
                 .switchIfEmpty(Mono.defer(() -> Mono.just(asks.stream()
                         .filter(a -> !a.equals(asked))
@@ -112,6 +115,7 @@ public class StudyService {
 
     private Mono<QuestionDTO> generateNextQuestion(final StudyDTO dto){
         return Mono.just(dto.remainAsks().get(new Random().nextInt(dto.remainAsks().size())))
+                .doFirst(() -> log.info("==== select next random question"))
                 .map(ask -> dto.studyDeck()
                         .cards()
                         .stream()

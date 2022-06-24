@@ -67,8 +67,8 @@ public record StudyDTO(String id,
             return this;
         }
 
-        public StudyDocumentBuilder remainAnswers(final List<String> remainAnswers){
-            this.remainAsks = remainAnswers;
+        public StudyDocumentBuilder remainAsks(final List<String> remainAsks){
+            this.remainAsks = remainAsks;
             return this;
         }
 

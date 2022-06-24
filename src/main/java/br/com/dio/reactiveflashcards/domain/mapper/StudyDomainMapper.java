@@ -29,13 +29,11 @@ public interface StudyDomainMapper {
 
     @Mapping(target = "asked", source = "front")
     @Mapping(target = "answered", ignore = true)
-    @Mapping(target = "answeredIn", ignore = true)
     @Mapping(target = "expected", source = "back")
     Question toQuestion(final StudyCard card);
 
     @Mapping(target = "asked", source = "front")
     @Mapping(target = "answered", ignore = true)
-    @Mapping(target = "answeredIn", ignore = true)
     @Mapping(target = "expected", source = "back")
     QuestionDTO toQuestion(final StudyCardDTO card);
 
@@ -48,8 +46,10 @@ public interface StudyDomainMapper {
         return document.toBuilder().questions(questions).build();
     }
 
+    @Mapping(target = "question", ignore = true)
     StudyDTO toDTO(final StudyDocument document, final List<String> remainAsks);
 
+    @Mapping(target = "question", ignore = true)
     StudyDocument toDocument(final StudyDTO dto);
 
 }

@@ -1,6 +1,7 @@
 package br.com.dio.reactiveflashcards.api.mapper;
 
 import br.com.dio.reactiveflashcards.api.contorller.request.StudyRequest;
+import br.com.dio.reactiveflashcards.api.contorller.response.AnswerQuestionResponse;
 import br.com.dio.reactiveflashcards.api.contorller.response.QuestionResponse;
 import br.com.dio.reactiveflashcards.domain.document.Question;
 import br.com.dio.reactiveflashcards.domain.document.StudyDocument;
@@ -20,5 +21,7 @@ public interface StudyMapper {
     StudyDocument toDocument(final StudyRequest request);
 
     QuestionResponse toResponse(final Question question, final String id);
+
+    AnswerQuestionResponse toResponse(final Question question);
 
 }

@@ -1,6 +1,8 @@
 package br.com.dio.reactiveflashcards.api.contorller;
 
+import br.com.dio.reactiveflashcards.api.contorller.request.AnswerQuestionRequest;
 import br.com.dio.reactiveflashcards.api.contorller.request.StudyRequest;
+import br.com.dio.reactiveflashcards.api.contorller.response.AnswerQuestionResponse;
 import br.com.dio.reactiveflashcards.api.contorller.response.QuestionResponse;
 import br.com.dio.reactiveflashcards.api.mapper.StudyMapper;
 import br.com.dio.reactiveflashcards.core.validation.MongoId;
@@ -47,6 +49,15 @@ public class StudyController {
         return studyQueryService.getLastPendingQuestion(id)
                 .doFirst(() -> log.info("==== try to get a next question in stuudy {}", id))
                 .map(question -> studyMapper.toResponse(question, id));
+    }
+
+    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE, value = "{id}/answer")
+    public Mono<AnswerQuestionResponse> answer(@Valid @PathVariable @MongoId(message = "{studyController.id}") final String id,
+                                               @Valid @RequestBody final AnswerQuestionRequest request){
+        return studyService.answer(id, request.answer())
+                .doFirst(() -> log.info("==== try to answer pending question in study {} with {}", id, request.answer()))
+                .map(document -> studyMapper.toResponse(document.getLastAnsweredQuestion()));
+
     }
 
 }

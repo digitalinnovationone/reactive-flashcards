@@ -41,6 +41,7 @@ public class StudyQueryService {
 
     public Mono<StudyDocument> verifyIfFinished(final StudyDocument document){
         return Mono.just(document)
+                .doFirst(() -> log.info("==== verify if study has some question without right answer"))
                 .filter(study -> BooleanUtils.isFalse(document.complete()))
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException(STUDY_QUESTION_NOT_FOUND
                         .params(document.id()).getMessage()))));
@@ -50,7 +51,7 @@ public class StudyQueryService {
         return findById(id)
                 .flatMap(this::verifyIfFinished)
                 .flatMapMany(study -> Flux.fromIterable(study.questions()))
-                .filter(Question::isAnswered)
+                .filter(Question::isNotAnswered)
                 .doFirst(() -> log.info("==== Getting a current pending question in study {}", id))
                 .single();
     }
