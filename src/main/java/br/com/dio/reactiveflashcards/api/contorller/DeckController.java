@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -46,7 +47,6 @@ public class DeckController {
     }
 
     @PostMapping(value = "sync")
-    @ResponseStatus(NO_CONTENT)
     public Mono<Void> sync(){
         return deckService.sync();
     }
@@ -55,6 +55,13 @@ public class DeckController {
     public Mono<DeckResponse> findById(@PathVariable @Valid @MongoId(message = "{deckController.id}") final String id){
         return deckQueryService.findById(id)
                 .doFirst(() -> log.info("==== Finding a deck with follow id {}", id))
+                .map(deckMapper::toResponse);
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public Flux<DeckResponse> findAll(){
+        return deckQueryService.findAll()
+                .doFirst(() -> log.info("==== Finding all decks"))
                 .map(deckMapper::toResponse);
     }
 
