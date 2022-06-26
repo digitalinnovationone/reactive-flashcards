@@ -14,6 +14,4 @@ public record DeckDTO(@JsonProperty("name")
                       @JsonProperty("cards")
                       List<CardDTO> cards) {
 
-    @Builder(toBuilder = true)
-    public DeckDTO { }
 }
