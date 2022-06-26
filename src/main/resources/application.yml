@@ -22,10 +22,10 @@ retry-config:
   min-duration: 1
 
 http-client:
-  response-timeout: 30000
-  read-timeout: 30000
+  response-timeout: 3000
+  read-timeout: 3000
 
 deck-api:
-  base-url: http://localhost:3000
+  base-url: external:3000
   auth-resource: auth
   decks-resource: decks

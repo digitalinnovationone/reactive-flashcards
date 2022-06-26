@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record CardDTO(@JsonProperty("ask")
                       String ask,
-                      @JsonProperty("ask")
+                      @JsonProperty("answer")
                       String answer) {
 
 }
