@@ -1,6 +1,8 @@
 package br.com.dio.reactiveflashcards.api.contorller;
 
+import br.com.dio.reactiveflashcards.api.contorller.request.UserPageRequest;
 import br.com.dio.reactiveflashcards.api.contorller.request.UserRequest;
+import br.com.dio.reactiveflashcards.api.contorller.response.UserPageResponse;
 import br.com.dio.reactiveflashcards.api.contorller.response.UserResponse;
 import br.com.dio.reactiveflashcards.api.mapper.UserMapper;
 import br.com.dio.reactiveflashcards.core.validation.MongoId;
@@ -50,6 +52,13 @@ public class UserController {
         return userQueryService.findById(id)
                 .doFirst(() -> log.info("==== Finding a user with follow id {}", id))
                 .map(userMapper::toResponse);
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public Mono<UserPageResponse> findOnDemand(@Valid final UserPageRequest request){
+        return userQueryService.findOnDemand(request)
+                .doFirst(() -> log.info("==== Finding users on demand with follow request {}", request))
+                .map(page -> userMapper.toResponse(page, request.limit()));
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE, value = "{id}")
