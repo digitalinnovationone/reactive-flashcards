@@ -1,18 +1,23 @@
 package br.com.dio.reactiveflashcards.api.contorller.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 public record UserPageResponse(@JsonProperty("currentPage")
+                               @Schema(description = "pagina retornada", example = "1")
                                Long currentPage,
                                @JsonProperty("totalPages")
+                               @Schema(description = "total de páginas", example = "20")
                                Long totalPages,
                                @JsonProperty("totalItems")
+                               @Schema(description = "soma ", example = "quantidade de registros paginados")
                                Long totalItems,
                                @JsonProperty("content")
+                               @Schema(description = "usuários de pagina")
                                List<UserResponse> content) {
 
     public static UserPageResponseBuilder builder(){
