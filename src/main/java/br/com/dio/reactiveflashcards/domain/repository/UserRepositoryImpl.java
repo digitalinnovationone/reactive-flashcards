@@ -42,12 +42,12 @@ public class UserRepositoryImpl {
 
     private Mono<Query> buildWhere(final Query query, final String sentence){
         return Mono.just(query)
-                .filter(q -> StringUtils.isNotBlank(sentence))
-                .switchIfEmpty(Mono.defer(() -> Mono.just(query)))
-                .flatMapMany(q -> Flux.fromIterable(List.of("name", "email")))
-                .map(dbField -> where(dbField).regex(sentence, "i"))
-                .collectList()
-                .map(setWhereClause(query));
+                .filter(q -> StringUtils.isBlank(sentence))
+                .switchIfEmpty(Mono.defer(() -> Mono.just(query))
+                        .flatMapIterable(q -> List.of("name", "email"))
+                        .map(dbField -> where(dbField).regex(sentence, "i"))
+                        .collectList()
+                        .map(setWhereClause(query)));
     }
 
     private Function<List<Criteria>, Query> setWhereClause(final Query query) {
