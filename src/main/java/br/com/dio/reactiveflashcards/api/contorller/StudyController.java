@@ -1,5 +1,6 @@
 package br.com.dio.reactiveflashcards.api.contorller;
 
+import br.com.dio.reactiveflashcards.api.contorller.documentation.StudyControllerDoc;
 import br.com.dio.reactiveflashcards.api.contorller.request.AnswerQuestionRequest;
 import br.com.dio.reactiveflashcards.api.contorller.request.StudyRequest;
 import br.com.dio.reactiveflashcards.api.contorller.response.AnswerQuestionResponse;
@@ -30,12 +31,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("studies")
 @Slf4j
 @AllArgsConstructor
-public class StudyController {
+public class StudyController implements StudyControllerDoc {
 
     private final StudyService studyService;
     private final StudyQueryService studyQueryService;
     private final StudyMapper studyMapper;
 
+    @Override
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(CREATED)
     public Mono<QuestionResponse> start(@Valid @RequestBody final StudyRequest request){
@@ -44,6 +46,7 @@ public class StudyController {
                 .map(document -> studyMapper.toResponse(document.getLastPendingQuestion(), document.id()));
     }
 
+    @Override
     @GetMapping(produces = APPLICATION_JSON_VALUE, value = "{id}/current-question")
     public Mono<QuestionResponse> getCurrentQuestion(@Valid @PathVariable @MongoId(message = "{studyController.id}") final String id){
         return studyQueryService.getLastPendingQuestion(id)
@@ -51,6 +54,7 @@ public class StudyController {
                 .map(question -> studyMapper.toResponse(question, id));
     }
 
+    @Override
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE, value = "{id}/answer")
     public Mono<AnswerQuestionResponse> answer(@Valid @PathVariable @MongoId(message = "{studyController.id}") final String id,
                                                @Valid @RequestBody final AnswerQuestionRequest request){
