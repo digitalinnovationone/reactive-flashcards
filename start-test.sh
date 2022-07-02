@@ -1,0 +1,2 @@
+gradle clean
+gradle test

@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
+	id 'com.adarshr.test-logger' version '3.2.0'
 }
 
 group = 'br.com.dio'
@@ -37,6 +39,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
 	implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.9'
+	implementation 'org.yaml:snakeyaml:1.29'
 
 	compileOnly 'org.projectlombok:lombok'
 
@@ -44,13 +47,33 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
 
+	testImplementation 'org.mongodb:mongodb-driver-sync'
+	testImplementation 'org.mongodb:bson'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'com.github.javafaker:javafaker:1.0.2'
+	testImplementation 'org.projectlombok:lombok'
+
+	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	testlogger{
+		theme 'mocha-parallel'
+		showExceptions true
+		slowThreshold 400
+		showSummary true
+		showPassed true
+		showSkipped true
+		showFailed true
+		showStandardStreams true
+		showSkippedStandardStreams true
+		showPassedStandardStreams true
+		showFailedStandardStreams true
+	}
+	finalizedBy jacocoTestReport
 }
 
 bootRun{

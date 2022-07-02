@@ -4,12 +4,13 @@ services:
   app:
     build:
       context: .
-    command: bash start.sh
+    command: bash start-dev.sh
     ports:
       - "8080:8080"
       - "5005:5005"
     environment:
       GRADLE_USER_HOME: /box
+      SPRING_PROFILES_ACTIVE: dev
     volumes:
       - .:/reactive-flashcards
       - box:/box
