@@ -33,22 +33,29 @@ public class UserService {
 
     private Mono<Void> verifyEmail(final UserDocument document){
         return userQueryService.findByEmail(document.email())
-                .filter(stored -> stored.id().equals(document.id()))
-                .switchIfEmpty(Mono.defer(() ->Mono.error(new EmailAlreadyUsedException(EMAIL_ALREADY_USED
-                        .params(document.email()).getMessage()))))
-                .onErrorResume(NotFoundException.class, e -> Mono.empty())
-                .then();
+                .flatMap(stored -> doVerifyEmail(stored, document))
+                .onErrorResume(NotFoundException.class, e -> Mono.empty());
+    }
+
+    private Mono<Void> doVerifyEmail(final UserDocument storedUser, final UserDocument document){
+        return Mono.just(storedUser)
+                .filter(Objects::isNull)
+                .switchIfEmpty(Mono.defer(() -> Mono.just(storedUser)
+                        .filter(stored -> stored.id().equals(document.id()))
+                        .switchIfEmpty(Mono.defer(() ->Mono.error(new EmailAlreadyUsedException(EMAIL_ALREADY_USED
+                                .params(document.email()).getMessage()))))
+                )).then();
     }
 
     public Mono<UserDocument> update(final UserDocument document){
         return verifyEmail(document)
-                .then(userQueryService.findById(document.id())
+                .then(Mono.defer(() -> userQueryService.findById(document.id())
                         .map(user -> document.toBuilder()
                                 .createdAt(user.createdAt())
                                 .updatedAt(user.updatedAt())
                                 .build())
                         .flatMap(userRepository::save)
-                        .doFirst(() -> log.info("==== Try to update a user with follow info {}", document)));
+                        .doFirst(() -> log.info("==== Try to update a user with follow info {}", document))));
     }
 
     public Mono<Void> delete(final String id){
