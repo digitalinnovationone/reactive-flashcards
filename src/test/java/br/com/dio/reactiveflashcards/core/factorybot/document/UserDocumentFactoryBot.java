@@ -40,11 +40,8 @@ public class UserDocumentFactoryBot {
             return this;
         }
 
-        public UserDocumentFactoryBotBuilder preUpdate(final String id,
-                                                       final OffsetDateTime createdAt, final OffsetDateTime updatedAt){
+        public UserDocumentFactoryBotBuilder preUpdate(final String id){
             this.id = id;
-            this.createdAt = createdAt;
-            this.updatedAt = updatedAt;
             return this;
         }
 

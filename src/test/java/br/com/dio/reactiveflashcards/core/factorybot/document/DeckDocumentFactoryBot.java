@@ -57,11 +57,8 @@ public class DeckDocumentFactoryBot {
             return this;
         }
 
-        public DeckDocumentFactoryBotBuilder preUpdate(final String id, final OffsetDateTime createdAt,
-                                                       final OffsetDateTime updatedAt){
+        public DeckDocumentFactoryBotBuilder preUpdate(final String id){
             this.id = id;
-            this.createdAt = createdAt;
-            this.updatedAt = updatedAt;
             return this;
         }
 

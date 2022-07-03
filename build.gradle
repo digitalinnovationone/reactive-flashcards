@@ -54,11 +54,13 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'com.github.javafaker:javafaker:1.0.2'
 	testImplementation 'org.projectlombok:lombok'
+	testImplementation 'org.mockito:mockito-core:4.6.1'
 
 	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
+	jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005'
 	useJUnitPlatform()
 	testlogger{
 		theme 'mocha-parallel'
