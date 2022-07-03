@@ -134,7 +134,7 @@ public class UserServiceTest {
     @Test
     void whenTryToUpdateUserNonStoredThenThrowError(){
         var document = UserDocumentFactoryBot.builder().build();
-        when(userQueryService.findByEmail(any(String.class))).thenReturn(Mono.empty());
+        when(userQueryService.findByEmail(any(String.class))).thenReturn(Mono.error(new NotFoundException("")));
         when(userQueryService.findById(any(String.class))).thenReturn(Mono.error(new NotFoundException("")));
 
         StepVerifier.create(userService.update(document))
