@@ -29,10 +29,10 @@ public class StudyDocumentFactoryBot {
         private String id;
         private String userId;
         private StudyDeck studyDeck = StudyDeck.builder().build();
-        private List<Question> questions = new ArrayList<>();
+        private final List<Question> questions = new ArrayList<>();
         private OffsetDateTime createdAt;
         private OffsetDateTime updatedAt;
-        private Faker faker = getFaker();
+        private final Faker faker = getFaker();
 
         public StudyDocumentFactoryBotBuilder(final String userId, final DeckDocument deck) {
             this.id = ObjectId.get().toString();
@@ -52,6 +52,31 @@ public class StudyDocumentFactoryBot {
                     .answered(c.back())
                     .expected(c.back())
                     .build()));
+            return this;
+        }
+
+        public StudyDocumentFactoryBotBuilder pendingQuestions(final Integer remain){
+            this.questions.clear();
+            studyDeck.cards().forEach(c -> questions.add(Question.builder()
+                    .asked(c.front())
+                    .answered(c.back())
+                    .expected(c.back())
+                    .build()));
+            var index = questions.size() - remain;
+            while (index < questions.size()) {
+                var selectedStudy = questions.get(index);
+                selectedStudy = Question.builder()
+                        .asked(selectedStudy.asked())
+                        .expected(selectedStudy.expected())
+                        .build();
+                questions.set(index, selectedStudy);
+                ++index;
+            }
+            var positionsToRemove = remain -1;
+            while (positionsToRemove != 0){
+                questions.remove(questions.size() - positionsToRemove);
+                --positionsToRemove;
+            }
             return this;
         }
 
