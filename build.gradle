@@ -26,6 +26,7 @@ repositories {
 
 ext{
 	mapstructVersion = '1.5.1.Final'
+	okhttpVersion = '4.10.0'
 }
 
 dependencies {
@@ -55,6 +56,9 @@ dependencies {
 	testImplementation 'com.github.javafaker:javafaker:1.0.2'
 	testImplementation 'org.projectlombok:lombok'
 	testImplementation 'org.mockito:mockito-core:4.6.1'
+	testImplementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+	testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpVersion"
+	testImplementation 'com.icegreen:greenmail:1.6.9'
 
 	testAnnotationProcessor 'org.projectlombok:lombok'
 }
