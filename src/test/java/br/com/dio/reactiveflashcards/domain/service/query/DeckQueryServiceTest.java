@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import static br.com.dio.reactiveflashcards.core.factorybot.RandomData.getFaker;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -55,18 +56,18 @@ public class DeckQueryServiceTest {
     @Test
     void findByIdTest(){
         var document = DeckDocumentFactoryBot.builder().build();
-        when(deckRepository.findById(any(String.class))).thenReturn(Mono.just(document));
+        when(deckRepository.findById(anyString())).thenReturn(Mono.just(document));
         StepVerifier.create(deckQueryService.findById(ObjectId.get().toString()))
                 .assertNext(actual -> assertThat(actual).isNotNull())
                 .verifyComplete();
-        verify(deckRepository).findById(any(String.class));
+        verify(deckRepository).findById(anyString());
     }
 
     @Test
     void whenTryToFindNonStoredDeckThenThrowError(){
-        when(deckRepository.findById(any(String.class))).thenReturn(Mono.empty());
+        when(deckRepository.findById(anyString())).thenReturn(Mono.empty());
         StepVerifier.create(deckQueryService.findById(ObjectId.get().toString())).verifyError(NotFoundException.class);
-        verify(deckRepository).findById(any(String.class));
+        verify(deckRepository).findById(anyString());
     }
 
 }

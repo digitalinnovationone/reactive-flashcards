@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import static br.com.dio.reactiveflashcards.core.factorybot.RandomData.getFaker;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -84,7 +85,7 @@ public class DeckServiceTest {
             var deck = invocation.getArgument(0, DeckDocument.class);
             return Mono.just(deck.toBuilder().updatedAt(OffsetDateTime.now()).build());
         });
-        when(deckQueryService.findById(any(String.class))).thenReturn(Mono.just(storedDeck));
+        when(deckQueryService.findById(anyString())).thenReturn(Mono.just(storedDeck));
 
         StepVerifier.create(deckService.update(document))
                 .assertNext(actual ->{
@@ -96,17 +97,17 @@ public class DeckServiceTest {
                 })
                 .verifyComplete();
         verify(deckRepository).save(any());
-        verify(deckQueryService).findById(any(String.class));
+        verify(deckQueryService).findById(anyString());
         verifyNoInteractions(deckRestQueryService);
     }
 
     @Test
     void whenTryToUpdateNonStoredDeckThenThrowError(){
         var document = DeckDocumentFactoryBot.builder().build();
-        when(deckQueryService.findById(any(String.class))).thenReturn(Mono.error(new NotFoundException("")));
+        when(deckQueryService.findById(anyString())).thenReturn(Mono.error(new NotFoundException("")));
         StepVerifier.create(deckService.update(document))
                 .verifyError(NotFoundException.class);
-        verify(deckQueryService).findById(any(String.class));
+        verify(deckQueryService).findById(anyString());
         verify(deckRepository, times(0)).save(any());
         verifyNoInteractions(deckRestQueryService);
     }
@@ -116,7 +117,7 @@ public class DeckServiceTest {
         var deckCaptor = ArgumentCaptor.forClass(DeckDocument.class);
         var storedDeck = DeckDocumentFactoryBot.builder().build();
         when(deckRepository.delete(deckCaptor.capture())).thenReturn(Mono.empty());
-        when(deckQueryService.findById(any(String.class))).thenReturn(Mono.just(storedDeck));
+        when(deckQueryService.findById(anyString())).thenReturn(Mono.just(storedDeck));
 
         StepVerifier.create(deckService.delete(ObjectId.get().toString())).verifyComplete();
         var capturedDeck = deckCaptor.getValue();
@@ -126,16 +127,16 @@ public class DeckServiceTest {
         assertThat(capturedDeck.createdAt().toEpochSecond()).isEqualTo(storedDeck.createdAt().toEpochSecond());
         assertThat(capturedDeck.updatedAt().toEpochSecond()).isEqualTo(storedDeck.updatedAt().toEpochSecond());
         verify(deckRepository).delete(any(DeckDocument.class));
-        verify(deckQueryService).findById(any(String.class));
+        verify(deckQueryService).findById(anyString());
         verifyNoInteractions(deckRestQueryService);
     }
 
     @Test
     void whenTryToDeleteNonStoredDeckThenThrowError(){
-        when(deckQueryService.findById(any(String.class))).thenReturn(Mono.error(new NotFoundException("")));
+        when(deckQueryService.findById(anyString())).thenReturn(Mono.error(new NotFoundException("")));
         StepVerifier.create(deckService.delete(ObjectId.get().toString()))
                 .verifyError(NotFoundException.class);
-        verify(deckQueryService).findById(any(String.class));
+        verify(deckQueryService).findById(anyString());
         verify(deckRepository, times(0)).delete(any(DeckDocument.class));
         verifyNoInteractions(deckRestQueryService);
     }

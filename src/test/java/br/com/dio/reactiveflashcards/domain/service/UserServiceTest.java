@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -47,7 +48,7 @@ public class UserServiceTest {
     @Test
     void saveTest(){
         var document = UserDocumentFactoryBot.builder().build();
-        when(userQueryService.findByEmail(any(String.class))).thenReturn(Mono.error(new NotFoundException("")));
+        when(userQueryService.findByEmail(anyString())).thenReturn(Mono.error(new NotFoundException("")));
         when(userRepository.save(any(UserDocument.class))).thenAnswer(invocation -> {
             var user = invocation.getArgument(0, UserDocument.class);
             return Mono.just(user.toBuilder()
@@ -69,18 +70,18 @@ public class UserServiceTest {
                 })
                 .verifyComplete();
         verify(userRepository).save(any(UserDocument.class));
-        verify(userQueryService).findByEmail(any(String.class));
+        verify(userQueryService).findByEmail(anyString());
     }
 
     @Test
     void whenTryToSaveUserWithExistingEmailThenThrowError(){
         var document = UserDocumentFactoryBot.builder().build();
-        when(userQueryService.findByEmail(any(String.class))).thenReturn(Mono.just(UserDocumentFactoryBot.builder().build()));
+        when(userQueryService.findByEmail(anyString())).thenReturn(Mono.just(UserDocumentFactoryBot.builder().build()));
 
         StepVerifier.create(userService.save(document))
                 .verifyError(EmailAlreadyUsedException.class);
         verify(userRepository, times(0)).save(any(UserDocument.class));
-        verify(userQueryService).findByEmail(any(String.class));
+        verify(userQueryService).findByEmail(anyString());
     }
 
     private static Stream<Arguments> updateTest(){
@@ -95,8 +96,8 @@ public class UserServiceTest {
     @MethodSource
     @ParameterizedTest
     void updateTest(final UserDocument toUpdate, final Mono<UserDocument> mockFindByEmail, final UserDocument mockFindById){
-        when(userQueryService.findByEmail(any(String.class))).thenReturn(mockFindByEmail);
-        when(userQueryService.findById(any(String.class))).thenReturn(Mono.just(mockFindById));
+        when(userQueryService.findByEmail(anyString())).thenReturn(mockFindByEmail);
+        when(userQueryService.findById(anyString())).thenReturn(Mono.just(mockFindById));
         when(userRepository.save(any(UserDocument.class))).thenAnswer(invocation -> {
             var user = invocation.getArgument(0, UserDocument.class);
             return Mono.just(user.toBuilder()
@@ -114,54 +115,54 @@ public class UserServiceTest {
                             .isEqualTo(toUpdate);
                 })
                 .verifyComplete();
-        verify(userQueryService).findByEmail(any(String.class));
+        verify(userQueryService).findByEmail(anyString());
         verify(userRepository).save(any(UserDocument.class));
-        verify(userQueryService).findById(any(String.class));
+        verify(userQueryService).findById(anyString());
     }
 
     @Test
     void whenTryToUpdateUserWithEmailUsedByOtherThenThrowError(){
         var document = UserDocumentFactoryBot.builder().build();
-        when(userQueryService.findByEmail(any(String.class))).thenReturn(Mono.just(UserDocumentFactoryBot.builder().build()));
+        when(userQueryService.findByEmail(anyString())).thenReturn(Mono.just(UserDocumentFactoryBot.builder().build()));
 
         StepVerifier.create(userService.update(document))
                 .verifyError(EmailAlreadyUsedException.class);
-        verify(userQueryService).findByEmail(any(String.class));
-        verify(userQueryService, times(0)).findById(any(String.class));
+        verify(userQueryService).findByEmail(anyString());
+        verify(userQueryService, times(0)).findById(anyString());
         verify(userRepository, times(0)).save(any(UserDocument.class));
     }
 
     @Test
     void whenTryToUpdateUserNonStoredThenThrowError(){
         var document = UserDocumentFactoryBot.builder().build();
-        when(userQueryService.findByEmail(any(String.class))).thenReturn(Mono.error(new NotFoundException("")));
-        when(userQueryService.findById(any(String.class))).thenReturn(Mono.error(new NotFoundException("")));
+        when(userQueryService.findByEmail(anyString())).thenReturn(Mono.error(new NotFoundException("")));
+        when(userQueryService.findById(anyString())).thenReturn(Mono.error(new NotFoundException("")));
 
         StepVerifier.create(userService.update(document))
                 .verifyError(NotFoundException.class);
-        verify(userQueryService).findByEmail(any(String.class));
-        verify(userQueryService).findById(any(String.class));
+        verify(userQueryService).findByEmail(anyString());
+        verify(userQueryService).findById(anyString());
         verify(userRepository, times(0)).save(any(UserDocument.class));
     }
 
     @Test
     void deleteTest(){
-        when(userQueryService.findById(any(String.class))).thenReturn(Mono.just(UserDocumentFactoryBot.builder().build()));
+        when(userQueryService.findById(anyString())).thenReturn(Mono.just(UserDocumentFactoryBot.builder().build()));
         when(userRepository.delete(any(UserDocument.class))).thenReturn(Mono.empty());
 
         StepVerifier.create(userService.delete(ObjectId.get().toString()))
                 .verifyComplete();
         verify(userRepository).delete(any(UserDocument.class));
-        verify(userQueryService).findById(any(String.class));
+        verify(userQueryService).findById(anyString());
     }
 
     @Test
     void whenTryToDeleteNonStoredUserThenThrowError(){
-        when(userQueryService.findById(any(String.class))).thenReturn(Mono.error(new NotFoundException("")));
+        when(userQueryService.findById(anyString())).thenReturn(Mono.error(new NotFoundException("")));
 
         StepVerifier.create(userService.delete(ObjectId.get().toString()))
                 .verifyError(NotFoundException.class);
-        verify(userQueryService).findById(any(String.class));
+        verify(userQueryService).findById(anyString());
         verifyNoInteractions(userRepository);
     }
 
