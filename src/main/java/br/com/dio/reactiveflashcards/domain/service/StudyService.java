@@ -44,7 +44,7 @@ public class StudyService {
 
     public Mono<StudyDocument> start(final StudyDocument document){
         return verifyStudy(document)
-                .then(userQueryService.findById(document.userId()))
+                .then(Mono.defer(() -> userQueryService.findById(document.userId())))
                 .flatMap(user -> deckQueryService.findById(document.studyDeck().deckId()))
                 .flatMap(deck -> fillDeckStudyCards(document, deck.cards()))
                 .map(study -> study.toBuilder()
