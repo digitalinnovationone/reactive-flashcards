@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 public record AuthDTO(@JsonProperty("token")
-                           String token,
+                      String token,
                       @JsonProperty("expiresIn")
-                           Long expiresIn) {
+                      Long expiresIn) {
 
 }

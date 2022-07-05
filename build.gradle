@@ -41,6 +41,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
 	implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.6.9'
 	implementation 'org.yaml:snakeyaml:1.29'
+	implementation 'commons-io:commons-io:2.11.0'
 
 	compileOnly 'org.projectlombok:lombok'
 
@@ -59,6 +60,11 @@ dependencies {
 	testImplementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
 	testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpVersion"
 	testImplementation 'com.icegreen:greenmail:1.6.9'
+	testImplementation('io.netty:netty-resolver-dns-native-macos:4.1.77.Final') {
+		artifact {
+			classifier = "osx-aarch_64"
+		}
+	}
 
 	testAnnotationProcessor 'org.projectlombok:lombok'
 }
