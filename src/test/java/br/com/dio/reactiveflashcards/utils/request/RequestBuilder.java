@@ -41,7 +41,7 @@ public class RequestBuilder<B> {
     }
 
     public static RequestBuilder<UserPageResponse> userPageResponseRequestBuilder(final ApplicationContext applicationContext,
-                                                                              final String baseUri){
+                                                                                 final String baseUri){
         return new RequestBuilder<>(applicationContext, baseUri, UserPageResponse.class);
     }
 
