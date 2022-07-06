@@ -31,22 +31,22 @@ public class AbstractBodyAssertUtils<B> {
         return this;
     }
 
-    public AbstractBodyAssertUtils<B> httpStatusCreated(){
+    public AbstractBodyAssertUtils<B> httpStatusIsCreated(){
         assertThat(response.getStatus()).isEqualTo(CREATED);
         return this;
     }
 
-    public AbstractBodyAssertUtils<B> httpStatusNoContent(){
+    public AbstractBodyAssertUtils<B> httpStatusIsNoContent(){
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT);
         return this;
     }
 
-    public AbstractBodyAssertUtils<B> httpStatusBadRequest(){
+    public AbstractBodyAssertUtils<B> httpStatusIsBadRequest(){
         assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
         return this;
     }
 
-    public AbstractBodyAssertUtils<B> httpStatusNotFound(){
+    public AbstractBodyAssertUtils<B> httpStatusIsNotFound(){
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND);
         return this;
     }

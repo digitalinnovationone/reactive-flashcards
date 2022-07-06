@@ -50,7 +50,7 @@ public final class DeckControllerDeleteTest extends AbstractControllerTest {
                         .build(ObjectId.get().toString()))
                 .generateRequestWithSimpleBody()
                 .doDelete()
-                .httpStatusNoContent();
+                .httpStatusIsNoContent();
    }
 
    @Test
@@ -61,7 +61,7 @@ public final class DeckControllerDeleteTest extends AbstractControllerTest {
                        .build(ObjectId.get().toString()))
                .generateRequestWithSimpleBody()
                .doDelete()
-               .httpStatusNotFound()
+               .httpStatusIsNotFound()
                .assertBody(actual ->{
                    assertThat(actual).isNotNull();
                    assertThat(actual.status()).isEqualTo(NOT_FOUND.value());
@@ -75,7 +75,7 @@ public final class DeckControllerDeleteTest extends AbstractControllerTest {
                        .build(faker.lorem().word()))
                .generateRequestWithSimpleBody()
                .doDelete()
-               .httpStatusBadRequest()
+               .httpStatusIsBadRequest()
                .assertBody(actual ->{
                    assertThat(actual).isNotNull();
                    assertThat(actual.status()).isEqualTo(BAD_REQUEST.value());

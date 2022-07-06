@@ -1,6 +1,11 @@
 package br.com.dio.reactiveflashcards.utils.request;
 
+import br.com.dio.reactiveflashcards.api.contorller.response.AnswerQuestionResponse;
+import br.com.dio.reactiveflashcards.api.contorller.response.DeckResponse;
 import br.com.dio.reactiveflashcards.api.contorller.response.ProblemResponse;
+import br.com.dio.reactiveflashcards.api.contorller.response.QuestionResponse;
+import br.com.dio.reactiveflashcards.api.contorller.response.UserPageResponse;
+import br.com.dio.reactiveflashcards.api.contorller.response.UserResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.util.UriBuilder;
@@ -23,6 +28,31 @@ public class RequestBuilder<B> {
     public static RequestBuilder<ProblemResponse> problemResponseRequestBuilder(final ApplicationContext applicationContext,
                                                                                 final String baseUri){
         return new RequestBuilder<>(applicationContext, baseUri, ProblemResponse.class);
+    }
+
+    public static RequestBuilder<DeckResponse> deckResponseRequestBuilder(final ApplicationContext applicationContext,
+                                                                       final String baseUri){
+        return new RequestBuilder<>(applicationContext, baseUri, DeckResponse.class);
+    }
+
+    public static RequestBuilder<UserResponse> userResponseRequestBuilder(final ApplicationContext applicationContext,
+                                                                          final String baseUri){
+        return new RequestBuilder<>(applicationContext, baseUri, UserResponse.class);
+    }
+
+    public static RequestBuilder<UserPageResponse> userPageResponseRequestBuilder(final ApplicationContext applicationContext,
+                                                                              final String baseUri){
+        return new RequestBuilder<>(applicationContext, baseUri, UserPageResponse.class);
+    }
+
+    public static RequestBuilder<QuestionResponse> questionResponseRequestBuilder(final ApplicationContext applicationContext,
+                                                                                  final String baseUri){
+        return new RequestBuilder<>(applicationContext, baseUri, QuestionResponse.class);
+    }
+
+    public static RequestBuilder<AnswerQuestionResponse> answerQuestionResponseRequestBuilder(final ApplicationContext applicationContext,
+                                                                                        final String baseUri){
+        return new RequestBuilder<>(applicationContext, baseUri, AnswerQuestionResponse.class);
     }
 
     private final WebTestClient webTestClient;

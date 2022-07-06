@@ -37,7 +37,7 @@ public abstract class AbstractControllerTest {
     @Autowired
     protected ApplicationContext applicationContext;
 
-    protected final Faker faker = getFaker();
+    protected final static Faker faker = getFaker();
 
 }
 
