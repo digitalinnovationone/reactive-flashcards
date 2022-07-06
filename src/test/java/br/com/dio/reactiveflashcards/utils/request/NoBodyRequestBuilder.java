@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
+import static org.springframework.http.MediaType.ALL;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class NoBodyRequestBuilder {
     private Object body;
 
     public EmptyBodyAssertUtils doDelete(){
-        var preResponse = webTestClient.get()
+        var preResponse = webTestClient.delete()
                 .uri(uriFunction)
                 .accept(APPLICATION_JSON);
         if (!headers.isEmpty()){

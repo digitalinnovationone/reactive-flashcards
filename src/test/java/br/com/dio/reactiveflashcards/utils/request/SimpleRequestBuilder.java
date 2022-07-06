@@ -35,7 +35,7 @@ public class SimpleRequestBuilder<B> {
     }
 
     public SimpleBodyAssertUtils<B> doDelete(){
-        var preResponse = webTestClient.get()
+        var preResponse = webTestClient.delete()
                 .uri(uriFunction)
                 .accept(APPLICATION_JSON);
         if (!headers.isEmpty()){

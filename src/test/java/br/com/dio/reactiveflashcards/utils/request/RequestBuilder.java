@@ -1,5 +1,6 @@
 package br.com.dio.reactiveflashcards.utils.request;
 
+import br.com.dio.reactiveflashcards.api.contorller.response.ProblemResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.util.UriBuilder;
@@ -13,6 +14,16 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class RequestBuilder<B> {
+
+    public static RequestBuilder<Void> noContentRequestBuilder(final ApplicationContext applicationContext,
+                                                               final String baseUri){
+        return new RequestBuilder<>(applicationContext, baseUri, Void.class);
+    }
+
+    public static RequestBuilder<ProblemResponse> problemResponseRequestBuilder(final ApplicationContext applicationContext,
+                                                                                final String baseUri){
+        return new RequestBuilder<>(applicationContext, baseUri, ProblemResponse.class);
+    }
 
     private final WebTestClient webTestClient;
     private Function<UriBuilder, URI> uriFunction;

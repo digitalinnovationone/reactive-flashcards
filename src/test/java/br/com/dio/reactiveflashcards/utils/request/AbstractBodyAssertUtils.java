@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -25,25 +26,29 @@ public class AbstractBodyAssertUtils<B> {
         return this;
     }
 
-    public AbstractBodyAssertUtils<B> HttpStatusIsOk(){
+    public AbstractBodyAssertUtils<B> httpStatusIsOk(){
         assertThat(response.getStatus()).isEqualTo(OK);
         return this;
     }
 
-    public AbstractBodyAssertUtils<B> HttpStatusCreated(){
+    public AbstractBodyAssertUtils<B> httpStatusCreated(){
         assertThat(response.getStatus()).isEqualTo(CREATED);
         return this;
     }
 
-    public AbstractBodyAssertUtils<B> HttpStatusNoContent(){
+    public AbstractBodyAssertUtils<B> httpStatusNoContent(){
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT);
         return this;
     }
 
-    public AbstractBodyAssertUtils<B> HttpStatusBadRequest(){
+    public AbstractBodyAssertUtils<B> httpStatusBadRequest(){
         assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
         return this;
     }
 
+    public AbstractBodyAssertUtils<B> httpStatusNotFound(){
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND);
+        return this;
+    }
 
 }
