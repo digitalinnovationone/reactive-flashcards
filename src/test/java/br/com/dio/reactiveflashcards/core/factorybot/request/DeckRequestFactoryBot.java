@@ -28,7 +28,7 @@ public class DeckRequestFactoryBot {
         public DeckRequestFactoryBotBuilder() {
             this.name = faker.name().name();
             generateCards(faker.number().numberBetween(3, 8));
-            this.description = faker.yoda().quote();
+            this.description = faker.color().name();
         }
 
         private void generateCards(final int amount){
@@ -76,7 +76,28 @@ public class DeckRequestFactoryBot {
         }
 
         public DeckRequestFactoryBotBuilder lessThanThreeCards(){
+            cards.clear();
             generateCards(faker.number().numberBetween(1, 3));
+            return this;
+        }
+
+        public DeckRequestFactoryBotBuilder cardWithBlankFront(){
+            this.cards.add(CardRequest.builder().front(faker.bool().bool() ? null : " ").build());
+            return this;
+        }
+
+        public DeckRequestFactoryBotBuilder cardWithLongFront(){
+            this.cards.add(CardRequest.builder().front(faker.lorem().sentence(256)).build());
+            return this;
+        }
+
+        public DeckRequestFactoryBotBuilder cardWithBlankBack(){
+            this.cards.add(CardRequest.builder().back(faker.bool().bool() ? null : " ").build());
+            return this;
+        }
+
+        public DeckRequestFactoryBotBuilder cardWithLongBack(){
+            this.cards.add(CardRequest.builder().back(faker.lorem().sentence(256)).build());
             return this;
         }
 
