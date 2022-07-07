@@ -9,6 +9,7 @@ import br.com.dio.reactiveflashcards.api.controller.AbstractControllerTest;
 import br.com.dio.reactiveflashcards.api.mapper.UserMapperImpl;
 import br.com.dio.reactiveflashcards.core.factorybot.request.UserRequestFactoryBot;
 import br.com.dio.reactiveflashcards.domain.document.UserDocument;
+import br.com.dio.reactiveflashcards.domain.exception.EmailAlreadyUsedException;
 import br.com.dio.reactiveflashcards.domain.service.UserService;
 import br.com.dio.reactiveflashcards.domain.service.query.UserQueryService;
 import br.com.dio.reactiveflashcards.utils.request.RequestBuilder;
@@ -73,6 +74,21 @@ public class UserControllerSaveTest extends AbstractControllerTest {
                     assertThat(response).usingRecursiveComparison()
                             .ignoringFields("id")
                             .isEqualTo(request);
+                });
+    }
+
+    @Test
+    void whenTryUseEmailInUseThenReturnConflict(){
+        when(userService.save(any(UserDocument.class))).thenReturn(Mono.error(new EmailAlreadyUsedException("")));
+        var request = UserRequestFactoryBot.builder().build();
+        problemResponseRequestBuilder.uri(UriBuilder::build)
+                .body(request)
+                .generateRequestWithSimpleBody()
+                .doPost()
+                .httpStatusIsBadRequest()
+                .assertBody(response ->{
+                    assertThat(response).isNotNull();
+                    assertThat(response.status()).isEqualTo(BAD_REQUEST.value());
                 });
     }
 
